@@ -13,9 +13,22 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('login', 'API\UserController@login');
-Route::post('register', 'API\UserController@register');
+Route::post('user/login', 'API\UserController@login');
+Route::post('user/register', 'API\UserController@register');
 
-Route::group(['middleware' => 'auth:api'], function(){
-    Route::post('details', 'API\UserController@details');
+Route::group(['middleware' => ['auth:api', 'isAdminOrSelf']], function(){
+    Route::post('user/details', 'API\UserController@details');
+    Route::post('user/logout', 'API\UserController@logout');
 });
+
+
+//products mangement routes with only access for admin
+Route::group(['middleware' => ['auth:api', 'isAdmin']], function(){
+    Route::post('products', 'API\ProductController@store');
+    Route::put('products/{id}', 'API\ProductController@update');
+    Route::delete('products/{id}', 'API\ProductController@destroy');
+});
+
+//public product routes
+Route::get('products', 'API\ProductController@index');
+Route::post('products/{id}', 'API\ProductController@show');

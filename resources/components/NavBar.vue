@@ -1,16 +1,24 @@
 <template>
-    <v-app-bar app>
-        <v-toolbar-title><router-link :to="{ name: 'Index'}">EShop</router-link></v-toolbar-title>
+    <v-app-bar app dark color="primary">
+        <v-toolbar-title>
+            <router-link color="white" :to="{ name: 'Index'}">
+                <v-btn text>
+                    Eshop
+                </v-btn>
+            </router-link>
+        </v-toolbar-title>
 
         <v-spacer></v-spacer>
 
         <!-- Iterate menuItems to show menu for each user type -->
-        <template v-for="item in menuItems[user.role]">
-            <router-link :to="item.link">
-                <v-btn text>
-                    <v-icon>{{ item.icon }}</v-icon> {{ item.title }}
-                </v-btn>
-            </router-link>
+        <template v-if="user">
+            <template v-for="item in menuItems[user.role]">
+                <router-link :to="item.link">
+                    <v-btn text>
+                        <v-icon>{{ item.icon }}</v-icon> {{ item.title }}
+                    </v-btn>
+                </router-link>
+            </template>
         </template>
 
         <!-- If user is logged in, show menu with an option to loggout -->
@@ -58,9 +66,6 @@
     import { mapGetters } from 'vuex'
 
     export default {
-        props: {
-            source: String,
-        },
         computed: {
             ...mapState('auth', ['user']),
             ...mapGetters('auth', ['loggedIn', 'isAdmin'])

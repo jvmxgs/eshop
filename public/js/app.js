@@ -1970,12 +1970,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: {
-    source: String
-  },
   computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapState"])('auth', ['user']), {}, Object(vuex__WEBPACK_IMPORTED_MODULE_0__["mapGetters"])('auth', ['loggedIn', 'isAdmin'])),
   data: function data() {
     return {
@@ -19932,40 +19937,51 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "v-app-bar",
-    { attrs: { app: "" } },
+    { attrs: { app: "", dark: "", color: "primary" } },
     [
       _c(
         "v-toolbar-title",
         [
-          _c("router-link", { attrs: { to: { name: "Index" } } }, [
-            _vm._v("EShop")
-          ])
+          _c(
+            "router-link",
+            { attrs: { color: "white", to: { name: "Index" } } },
+            [
+              _c("v-btn", { attrs: { text: "" } }, [
+                _vm._v("\n                Eshop\n            ")
+              ])
+            ],
+            1
+          )
         ],
         1
       ),
       _vm._v(" "),
       _c("v-spacer"),
       _vm._v(" "),
-      _vm._l(_vm.menuItems[_vm.user.role], function(item) {
-        return [
-          _c(
-            "router-link",
-            { attrs: { to: item.link } },
-            [
-              _c(
-                "v-btn",
-                { attrs: { text: "" } },
-                [
-                  _c("v-icon", [_vm._v(_vm._s(item.icon))]),
-                  _vm._v(" " + _vm._s(item.title) + "\n            ")
-                ],
-                1
-              )
-            ],
-            1
-          )
-        ]
-      }),
+      _vm.user
+        ? [
+            _vm._l(_vm.menuItems[_vm.user.role], function(item) {
+              return [
+                _c(
+                  "router-link",
+                  { attrs: { to: item.link } },
+                  [
+                    _c(
+                      "v-btn",
+                      { attrs: { text: "" } },
+                      [
+                        _c("v-icon", [_vm._v(_vm._s(item.icon))]),
+                        _vm._v(" " + _vm._s(item.title) + "\n                ")
+                      ],
+                      1
+                    )
+                  ],
+                  1
+                )
+              ]
+            })
+          ]
+        : _vm._e(),
       _vm._v(" "),
       _vm.loggedIn
         ? _c(
@@ -78029,7 +78045,7 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _views_auth_Login__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../views/auth/Login */ "./resources/views/auth/Login.vue");
-/* harmony import */ var _views_auth_Register__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../views/auth/Register */ "./resources/views/auth/Register.vue");
+/* harmony import */ var _views_auth_Register__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../views/auth/Register */ "./resources/views/auth/Register.vue");
 /* harmony import */ var _views_public_NotFound__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../views/public/NotFound */ "./resources/views/public/NotFound.vue");
 /* harmony import */ var _views_public_Index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../views/public/Index */ "./resources/views/public/Index.vue");
 
@@ -78053,7 +78069,7 @@ __webpack_require__.r(__webpack_exports__);
 }, {
   path: '/register',
   name: 'register',
-  component: _views_auth_Register__WEBPACK_IMPORTED_MODULE_4__["default"],
+  component: _views_auth_Register__WEBPACK_IMPORTED_MODULE_1__["default"],
   meta: {
     requiresAuth: false
   }
@@ -78168,7 +78184,7 @@ var mutations = {
 var actions = {
   retrieveToken: function retrieveToken(context, credentials) {
     return new Promise(function (resolve, reject) {
-      axios.post('/api/login', {
+      axios.post('/api/user/login', {
         username: credentials.username,
         password: credentials.password
       }).then(function (response) {
@@ -78183,7 +78199,7 @@ var actions = {
   },
   register: function register(context, data) {
     return new Promise(function (resolve, reject) {
-      axios.post('/api/register', {
+      axios.post('/api/user/register', {
         name: data.name,
         email: data.email,
         username: data.username,
@@ -78199,7 +78215,7 @@ var actions = {
   refresh: function refresh(context) {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token;
     return new Promise(function (resolve, reject) {
-      axios.post('/api/details').then(function (response) {
+      axios.post('/api/user/details').then(function (response) {
         var user = response.data.success;
         context.commit('updateUserDetails', user);
         resolve(response);
@@ -78215,7 +78231,7 @@ var actions = {
 
     if (context.getters.loggedIn) {
       return new Promise(function (resolve, reject) {
-        axios.get('/api/logout').then(function (response) {
+        axios.post('/api/user/logout').then(function (response) {
           //console.log(response)
           localStorage.removeItem('access_token');
           context.commit('destroyToken');

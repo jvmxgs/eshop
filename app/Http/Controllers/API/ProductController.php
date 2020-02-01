@@ -1,0 +1,31 @@
+<?php
+namespace App\Http\Controllers\API;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Product;
+use Illuminate\Support\Facades\Auth;
+use Validator;
+
+use App\Services\ProductService;
+use App\Http\Requests\ProductStoreRequest;
+
+class ProductController extends Controller
+{
+
+    public function store(ProductStoreRequest $request, ProductService $productService)
+    {
+        $validatedData = $request->validated();
+        return $productService->store($validatedData);
+    }
+
+    public function update(ProductStoreRequest $request, ProductService $productService, $id)
+    {
+        $validatedData = $request->validated();
+        return $productService->update($validatedData, $id);
+    }
+
+    public function destroy(ProductService $productService, $id)
+    {
+        return $productService->destroy($id);
+    }
+}

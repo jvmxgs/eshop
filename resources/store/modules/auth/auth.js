@@ -40,7 +40,7 @@ const actions = {
   retrieveToken(context, credentials) {
 
     return new Promise((resolve, reject) => {
-      axios.post('/api/login', {
+      axios.post('/api/user/login', {
         username: credentials.username,
         password: credentials.password,
       })
@@ -58,7 +58,7 @@ const actions = {
   },
   register(context, data) {
         return new Promise((resolve, reject) => {
-          axios.post('/api/register', {
+          axios.post('/api/user/register', {
             name: data.name,
             email: data.email,
             username: data.username,
@@ -77,7 +77,7 @@ const actions = {
 
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + context.state.token
       return new Promise((resolve, reject) => {
-        axios.post('/api/details')
+        axios.post('/api/user/details')
           .then(response => {
               const user = response.data.success
               context.commit('updateUserDetails', user)
@@ -99,7 +99,7 @@ const actions = {
     if (context.getters.loggedIn){
 
       return new Promise((resolve, reject) => {
-        axios.get('/api/logout')
+        axios.post('/api/user/logout')
           .then(response => {
             //console.log(response)
             localStorage.removeItem('access_token')

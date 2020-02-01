@@ -12,13 +12,15 @@ use App\Http\Requests\UserStoreRequest;
 class UserController extends Controller
 {
     /**
-     * login api
+     * Login api
      *
      * @return \Illuminate\Http\Response
      */
+
     public function login(Request $request)
     {
-        $username = $request->username; //the input field has name='username' in form
+        //the input field has name='username' in form
+        $username = $request->username;
 
         if(filter_var($username, FILTER_VALIDATE_EMAIL)) {
             //user sent their email
@@ -38,7 +40,8 @@ class UserController extends Controller
             return response()->json(['error'=>'Wrong username/password combination.'], 401);
         }
     }
-/**
+
+    /**
      * Register api
      *
      * @return \Illuminate\Http\Response
