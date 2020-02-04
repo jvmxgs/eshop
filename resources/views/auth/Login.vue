@@ -41,7 +41,9 @@
                                @click:append="show1 = !show1"
                             ></v-text-field>
 
-                            <v-btn color="primary" class="mr-4" @click="login">submit</v-btn>
+                            <v-btn color="primary" class="mr-4" @click="login">
+                                <v-icon>mdi-login</v-icon> Login
+                            </v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -51,33 +53,34 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-        show1: false,
-        username: null,
-        password: null,
-        errors: {}
-    };
-  },
-  methods: {
-    login() {
-      this.$store
-        .dispatch("auth/retrieveToken", {
-          username: this.username,
-          password: this.password
-        })
-        .then(response => {
-          this.goToIndex()
-        })
-        .catch(error => {
-          this.errors = error.response.data;
-        });
+    import AuthService from '../../services/auth'
 
-    },
-    goToIndex(){
-        this.$router.push({ name: "index" })
-    },
-  }
-};
+    export default {
+      data() {
+        return {
+            show1: false,
+            username: null,
+            password: null,
+            errors: {}
+        };
+      },
+      methods: {
+        login() {
+            AuthService.login({
+                username: this.username,
+                password: this.password
+            })
+            .then(token => {
+                this.$store.dispatch('auth/saveToken', token)
+                this.goToIndex()
+            })
+            .catch(error => {
+              this.errors = error.response.data;
+            });
+        },
+        goToIndex(){
+            this.$router.push({ name: "Index" })
+        },
+      }
+    };
 </script>

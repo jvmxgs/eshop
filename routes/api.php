@@ -16,7 +16,7 @@ use Illuminate\Http\Request;
 Route::post('user/login', 'API\UserController@login');
 Route::post('user/register', 'API\UserController@register');
 
-Route::group(['middleware' => ['auth:api', 'isAdminOrSelf']], function(){
+Route::group(['middleware' => ['auth:api']], function(){
     Route::post('user/details', 'API\UserController@details');
     Route::post('user/logout', 'API\UserController@logout');
 });
@@ -31,4 +31,4 @@ Route::group(['middleware' => ['auth:api', 'isAdmin']], function(){
 
 //public product routes
 Route::get('products', 'API\ProductController@index');
-Route::post('products/{id}', 'API\ProductController@show');
+Route::get('products/{id}', 'API\ProductController@show');

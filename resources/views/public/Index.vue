@@ -1,9 +1,13 @@
 <template>
-  <div>
-    <h1 class="title">Landing page</h1>
-  </div>
+     <ProductsList></ProductsList>
 </template>
 
 <script>
-export default {};
+    import ProductsList from '../common/products/ProductsList'
+
+    export default {
+        components: {
+            ProductsList
+        }
+    }
 </script>

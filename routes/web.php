@@ -17,4 +17,8 @@ Route::get('/', function () {
 });
 */
 
-Route::get('/{any}', 'EshopController@index')->where('any', '.*');
+//Route::get('/{any}', 'EshopController@index')->where('any', '.*');
+
+Route::get('/{any}', function () {
+    return view('eshop');
+})->where('any', '.*');

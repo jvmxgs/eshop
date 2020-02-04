@@ -5,13 +5,17 @@ import router from '../routes/router'
 import store from '../store/store'
 import Eshopapp from '../views/EShopApp'
 
+
+
 import Vuetify from 'vuetify'
 Vue.use(Vuetify)
 const vuetify = new Vuetify();
 
-router.beforeEach((to, from, next) => {
+import VueSweetalert2 from 'vue-sweetalert2';
+Vue.use(VueSweetalert2);
 
-    store.dispatch("auth/refresh")
+router.beforeEach(async (to, from, next) => {
+    await store.dispatch("auth/refresh")
 
     if (to.matched.some(record => record.meta.requiresAdmin)) {
       // this route requires Admin, check if logged as admin
@@ -38,7 +42,7 @@ router.beforeEach((to, from, next) => {
     } else {
         if (to.path === "/login" && store.getters["auth/loggedIn"]) {
             next({
-              name: 'dashboard',
+              name: 'admin',
             })
         } else {
             next()

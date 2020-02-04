@@ -9,9 +9,13 @@ import adminRoutes from './admin/admin'
 
 
 //concat all routes
-var routes = [...publicRoutes,
-            ...commonRoutes,
-            ...adminRoutes];
+/*
+var routes = [...commonRoutes,
+            ...adminRoutes,
+            ...publicRoutes];
+*/
+
+var routes = commonRoutes.concat(adminRoutes).concat(publicRoutes)
 
 // Router
 const router = new VueRouter({

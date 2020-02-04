@@ -5,6 +5,16 @@ use App\Product;
 
 class ProductService {
 
+    public function getAllProducts() {
+        $products = Product::orderBy('id', 'DESC')->paginate(10);
+        return response()->json($products, 200);
+    }
+
+    public function getProduct($id) {
+        $product = Product::where('id', $id)->get();
+        return response()->json($product, 200);
+    }
+
     public function store($request)
     {
         $request['slug'] = $this->generateSlug($request['name']);
@@ -27,10 +37,11 @@ class ProductService {
 
     public function destroy($id)
     {
-        $product = Product::find($id);
-        $product->delete();
-
-        return response()->json('Product deleted successfully', 200);
+        if ($product = Product::find($id)) {
+            $product->delete();
+            return response()->json('Product deleted successfully', 200);
+        }
+        return response()->json('Product not found', 404);
     }
 
     private function generateSlug($name)

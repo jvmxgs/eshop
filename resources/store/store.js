@@ -3,11 +3,13 @@ import Vuex from 'vuex'
 import axios from 'axios'
 Vue.use(Vuex)
 
-import auth from './modules/auth/auth'
+import auth from './modules/auth'
+import products from './modules/products'
 
 const store = new Vuex.Store({
     modules: {
-       auth
+       auth,
+       products
      }
 })
 

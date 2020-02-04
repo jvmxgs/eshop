@@ -21,6 +21,19 @@
             </template>
         </template>
 
+        <v-badge
+          :content="10"
+          :value="10"
+          color="green"
+          overlap
+          v-if="loggedIn && !isAdmin"
+        >
+            <v-btn icon>
+                <v-icon>mdi-cart</v-icon>
+            </v-btn>
+        </v-badge>
+
+
         <!-- If user is logged in, show menu with an option to loggout -->
 
         <v-menu bottom left v-if="loggedIn">
@@ -62,6 +75,7 @@
       </v-app-bar>
 </template>
 <script>
+    import AuthService from '../services/auth'
     import { mapState } from 'vuex'
     import { mapGetters } from 'vuex'
 
@@ -76,17 +90,16 @@
                     admin: [
                         {title: 'Products', icon: 'mdi-package-variant', link: {name :'products'}},
                         {title: 'Users', icon: 'mdi-account-group', link: {name :'users'}}
-                    ],
-                    user: [
-                        {title: 'Cart', icon: 'mdi-cart', link: {name :'cart'}}
                     ]
                 }
             }
         },
         methods: {
             logout() {
-                this.$store.dispatch("auth/destroyToken").then(response => {
-                  this.$router.push({ name: "login" });
+                AuthService.logout()
+                .then(response => {
+                    this.$router.push({ name: "login" })
+                    this.$store.dispatch('auth/destroyToken')
                 });
             }
         }

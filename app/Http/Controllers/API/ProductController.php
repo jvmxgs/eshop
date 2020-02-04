@@ -11,6 +11,13 @@ use App\Http\Requests\ProductStoreRequest;
 
 class ProductController extends Controller
 {
+    public function index(ProductService $productService) {
+        return $productService->getAllProducts();
+    }
+
+    public function show(ProductService $productService, $id) {
+        return $productService->getProduct($id);
+    }
 
     public function store(ProductStoreRequest $request, ProductService $productService)
     {

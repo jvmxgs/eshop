@@ -57,7 +57,9 @@
                                @click:append="show1 = !show1"
                             ></v-text-field>
 
-                            <v-btn color="primary" class="mr-4" @click="register">submit</v-btn>
+                            <v-btn color="primary" class="mr-4" @click="register">
+                                <v-icon left>mdi-account-edit</v-icon> Register me
+                            </v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -67,39 +69,39 @@
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-        show1: false,
-        name: null,
-        email: null,
-        username: null,
-        password: null,
-        password_confirmation: null,
-        errors: {}
+    import AuthService from '../../services/auth'
+    export default {
+      data() {
+        return {
+            show1: false,
+            name: null,
+            email: null,
+            username: null,
+            password: null,
+            password_confirmation: null,
+            errors: {}
+        };
+      },
+      methods: {
+          register() {
+              AuthService.register({
+                name: this.name,
+                email: this.email,
+                username: this.username,
+                password: this.password,
+                password_confirmation: this.password_confirmation,
+              })
+              .then(token => {
+                  this.$swal('Welcome',
+                            'Registered successfully!',
+                            'success').then(() => {
+                      this.$router.push({ name: 'login'})
+                  });
+              })
+              .catch(error => {
+                  this.errors = error.response.data.errors
+              });
+        }
+      }
     };
-  },
-  methods: {
-      register() {
-    this.$store.dispatch('auth/register', {
-      name: this.name,
-      email: this.email,
-      username: this.username,
-      password: this.password,
-      password_confirmation: this.password_confirmation,
-    })
-      .then(response => {
-        this.successMessage = 'Registered Successfully!'
-        this.$router.push({ name: 'login', params: { dataSuccessMessage: this.successMessage } })
-        this.$toast.success({
-          title: this.successMessage,
-          message: 'You can login here'
-        })
-      })
-      .catch(error => {
-        this.errors = error.response.data.errors
-      })
-    }
-  }
-};
 </script>
