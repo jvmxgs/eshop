@@ -13,12 +13,19 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('user/login', 'API\UserController@login');
-Route::post('user/register', 'API\UserController@register');
+Route::post('users/login', 'API\UserController@login');
+Route::post('users/register', 'API\UserController@register');
 
 Route::group(['middleware' => ['auth:api']], function(){
-    Route::post('user/details', 'API\UserController@details');
-    Route::post('user/logout', 'API\UserController@logout');
+    Route::post('users/details', 'API\UserController@details');
+    Route::post('users/logout', 'API\UserController@logout');
+});
+
+Route::group(['middleware' => ['auth:api', 'isAdmin']], function(){
+    Route::get('users', 'API\UserController@index');
+    Route::get('users/{id}', 'API\UserController@show');
+    Route::delete('users/{id}', 'API\UserController@destroy');
+    Route::put('users/{id}', 'API\UserController@update');
 });
 
 

@@ -14,6 +14,9 @@ const vuetify = new Vuetify();
 import VueSweetalert2 from 'vue-sweetalert2';
 Vue.use(VueSweetalert2);
 
+import VuetifyNumberInput from '@jzolago/vuetify-number-input'
+Vue.use(VuetifyNumberInput);
+
 router.beforeEach(async (to, from, next) => {
     await store.dispatch("auth/refresh")
 

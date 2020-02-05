@@ -6,7 +6,7 @@
 
 
                     <v-app-bar class="elevation-0">
-                        <v-toolbar-title>New product</v-toolbar-title>
+                        <v-toolbar-title>Edit product</v-toolbar-title>
                     </v-app-bar>
 
                     <v-card-text>

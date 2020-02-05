@@ -5,10 +5,10 @@
 
         <v-card
           class="mx-auto"
-          max-width="344"
+          max-width="300"
         >
           <v-img
-            src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+            src="/images/product.png"
             height="200px"
           ></v-img>
 
@@ -25,11 +25,13 @@
                 <v-icon>mdi-pencil</v-icon> Edit
             </v-btn>
 
-            <v-btn color="error" v-if="isAdmin" @click="deleteProduct(product.id)">
+            <v-btn color="error" v-if="isAdmin" @click="tryDeleteProduct(product.id)">
               <v-icon>mdi-trash-can</v-icon> Delete
             </v-btn>
 
             <v-spacer></v-spacer>
+
+            <v-chip color="success">$ {{product.price}}</v-chip>
 
             <v-btn v-if="loggedIn && !isAdmin" class="mx-2" fab dark small color="primary" @click="addToCart(product.id)">
               <v-icon>mdi-cart</v-icon>
@@ -41,9 +43,26 @@
 
 
         </v-col>
+
+
       </v-row>
+
+      <v-row align="center" v-if="!pagination.totalProducts" justify="center">
+          <v-col cols="12" sm="12" md="10">
+              <v-alert
+                   border="right"
+                   color="blue-grey"
+                   align="center"
+                   dark
+                 >
+                   There are no producs added
+             </v-alert>
+          </v-col>
+      </v-row>
+
       <v-row>
           <v-pagination
+              v-if="pagination.totalProducts"
               v-model="pagination.current"
               :length="pagination.total"
               @input="getAllProducts"
@@ -62,7 +81,8 @@
                 products: {},
                 pagination: {
                     current: 1,
-                    total: 0
+                    total: 0,
+                    totalProducts: 0
                 }
             }
         },
@@ -78,32 +98,36 @@
                 this.$store.dispatch('products/updateProducts', products.data)
                 let response = await this.$store.getters['products/getAllProducts']
                 this.products = response.data
-
                 this.pagination.total = response.last_page
+                this.pagination.totalProducts = response.total
+            },
+            tryDeleteProduct(id) {
+                this.$swal({title: 'Are you sure?',
+                  text: "You won't be able to revert this!",
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, delete it!'
+              }).then((desicion) => {
+                              if (desicion.value) {
+                                  this.$swal('Great',
+                                            'Product deleted successfully!',
+                                            'success').then(() => {
+                                                this.deleteProduct(id)
+                                  });
+                              }
+                });
             },
             async deleteProduct(id) {
                 await ProductServices.deleteProduct(id)
                 .then(response => {
-                    this.$swal({title: 'Are you sure?',
-                      text: "You won't be able to revert this!",
-                      icon: 'warning',
-                      showCancelButton: true,
-                      confirmButtonColor: '#3085d6',
-                      cancelButtonColor: '#d33',
-                      confirmButtonText: 'Yes, delete it!'
-                  }).then((desicion) => {
-                                  if (desicion.value) {
-                                      this.$swal('Great',
-                                                'Product deleted successfully!',
-                                                'success').then(() => {
-                                                        this.getAllProducts()
-                                      });
-                                  }
-                    });
+                    this.getAllProducts()
                 })
             },
-            addToCart() {
-                this.$store.dispatch('products/addToCart', id)
+            addToCart(id) {
+                const cartItem = this.products.find(item => item.id === id)
+                this.$store.dispatch('cart/addToCart', cartItem)
             }
         }
     }

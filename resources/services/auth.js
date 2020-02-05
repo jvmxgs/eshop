@@ -3,7 +3,7 @@ import Api from './Api'
 export default {
     login(credentials) {
         return new Promise((resolve, reject) => {
-            Api().post('/api/user/login', {
+            Api().post('/api/users/login', {
                 username: credentials.username,
                 password: credentials.password,
             })
@@ -20,7 +20,7 @@ export default {
 
     register(data) {
         return new Promise((resolve, reject) => {
-          Api().post('/api/user/register', {
+          Api().post('/api/users/register', {
             name: data.name,
             email: data.email,
             username: data.username,
@@ -38,7 +38,7 @@ export default {
 
     refresh(context, id) {
         return new Promise((resolve, reject) => {
-          Api().post('/api/user/details')
+          Api().post('/api/users/details')
             .then(response => {
                 resolve(response)
             })
@@ -50,7 +50,7 @@ export default {
     },
     logout() {
         return new Promise((resolve, reject) => {
-          Api().post('/api/user/logout')
+          Api().post('/api/users/logout')
             .then(response => {
                 localStorage.removeItem('access_token')
                 resolve(response)

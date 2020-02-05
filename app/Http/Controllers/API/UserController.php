@@ -8,9 +8,16 @@ use Illuminate\Support\Facades\Auth;
 use Validator;
 
 use App\Http\Requests\UserStoreRequest;
+use App\Http\Requests\UserUpdateRequest;
 
 class UserController extends Controller
 {
+
+    public function index()
+    {
+        return User::where('role_id', '2')->get();
+    }
+
     /**
      * Login api
      *
@@ -67,6 +74,24 @@ class UserController extends Controller
         return response()->json(['success'=>$success], 200);
     }
 
+    public function update(UserUpdateRequest $request, $id)
+    {
+        $dataValidated = $request->validated();
+        $user = User::find($id);
+
+
+        $user->name = $dataValidated['name'];
+        $user->email = $dataValidated['email'];
+        $user->username = $dataValidated['username'];
+        if (isset($dataValidated['password'])) {
+            $user->password = $dataValidated['password'];
+        }
+
+        $user->save();
+
+        return response()->json(['success'=> $dataValidated], 200);
+    }
+
     /**
      * details api
      *
@@ -80,6 +105,21 @@ class UserController extends Controller
         return response()->json(['success' => $user], 200);
     }
 
+    public function show($id)
+    {
+        $user = User::find($id);
+        return response()->json(['data' => $user], 200);
+    }
+
+    public function destroy($id)
+    {
+        if ($user = User::find($id)) {
+            $user->delete();
+            return response()->json('User deleted successfully', 200);
+        }
+        return response()->json('Product not found', 404);
+    }
+
     public function logout()
     {
         auth()->user()->tokens->each(function ($token, $key) {
@@ -88,5 +128,4 @@ class UserController extends Controller
 
         return response()->json('Logged out successfully', 200);
     }
-
 }

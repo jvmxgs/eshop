@@ -6,6 +6,7 @@ Vue.use(VueRouter)
 import publicRoutes from './public'
 import commonRoutes from './common'
 import adminRoutes from './admin/admin'
+import userRoutes from './user/user'
 
 
 //concat all routes
@@ -15,7 +16,9 @@ var routes = [...commonRoutes,
             ...publicRoutes];
 */
 
-var routes = commonRoutes.concat(adminRoutes).concat(publicRoutes)
+var routes = commonRoutes.concat(adminRoutes)
+                        .concat(userRoutes)
+                        .concat(publicRoutes)
 
 // Router
 const router = new VueRouter({

@@ -22,15 +22,17 @@
         </template>
 
         <v-badge
-          :content="10"
-          :value="10"
+          :content="itemsQuantity"
+          :value="itemsQuantity"
           color="green"
           overlap
           v-if="loggedIn && !isAdmin"
         >
-            <v-btn icon>
-                <v-icon>mdi-cart</v-icon>
-            </v-btn>
+            <router-link :to="{ name: 'cart'}">
+                <v-btn icon>
+                    <v-icon>mdi-cart</v-icon>
+                </v-btn>
+            </router-link>
         </v-badge>
 
 
@@ -82,10 +84,16 @@
     export default {
         computed: {
             ...mapState('auth', ['user']),
-            ...mapGetters('auth', ['loggedIn', 'isAdmin'])
+            ...mapGetters({loggedIn: 'auth/loggedIn',
+                        isAdmin: 'auth/isAdmin',
+                        itemsQuantity: 'cart/getItemsQuantity'
+            })
         },
         data() {
             return {
+                cart: {
+                    itemsCount: 0
+                },
                 menuItems : {
                     admin: [
                         {title: 'Products', icon: 'mdi-package-variant', link: {name :'products'}},
