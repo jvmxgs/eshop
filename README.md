@@ -1,7 +1,5 @@
 # Eshop
 
-Just a test for Webforce HQ
-
 ## Installation
 
 ### Clone the repository
@@ -72,5 +70,3 @@ password:secret
 user:user
 password:secret
 ```
-
-### Thank you for your time
